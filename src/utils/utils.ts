@@ -1,14 +1,15 @@
 import axios from 'axios'; 
+import { stringify } from 'querystring';
 import { API } from '../apiUris';
 import { IHSL } from '../interfaces/IHSL';
 import { ILight } from '../interfaces/ILight';
 const dotenv = require('dotenv').config().parsed;
 
-export const pollHueData = (setLights: any) => {
+export const pollHueData = (setLights: any, lights: ILight[]) => {
 
-    const host = process.env.REACT_APP_HOST ?? '';  
+    const url = getUrlWithAuthToken(API.FETCH_LIGHTS(process.env.REACT_APP_AUTH_TOKEN)); 
 
-    axios.get<any>(host.concat(API.FETCH_LIGHTS(process.env.REACT_APP_AUTH_TOKEN))).then((data) => {
+    axios.get<any>(url).then((data) => {
 
       let listOfLights: ILight[] = []; 
 
@@ -18,12 +19,14 @@ export const pollHueData = (setLights: any) => {
         let hex = hslToHex(hsl.h, hsl.s, hsl.l); 
         data.data[key].hex = hex; 
 
-        var state = mapToLight(data.data[key]);
+        var state = mapToLight(data.data[key], key);
 
         listOfLights.push(state);
       }
 
-      setLights(listOfLights); 
+      if(!arraysEqual(lights, listOfLights)) {
+        setLights(listOfLights);  
+      }
     });
   };
 
@@ -38,6 +41,11 @@ export const pollHueData = (setLights: any) => {
       l: newB
     };
   }
+
+export const toggleLight = (id: number, toggle: boolean) => {
+  const url = getUrlWithAuthToken(API.PUT_LIGHT(process.env.REACT_APP_AUTH_TOKEN, id)); 
+  return axios.put(url, {on:toggle});
+}
   
   function hslToHex(h: number, s: number, l: number) {
     l /= 100;
@@ -50,8 +58,34 @@ export const pollHueData = (setLights: any) => {
     return `#${f(0)}${f(8)}${f(4)}`;
   }
 
-  function mapToLight(obj: any): ILight {
+  export const createAlarm = (id: string, time: string) => {
+    const commandAddress = API.PUT_LIGHT(process.env.REACT_APP_AUTH_TOKEN, id);
+    const requestUri = getUrlWithAuthToken(API.CREATE_ALARM(process.env.REACT_APP_AUTH_TOKEN));
+    const payload ={
+      name: "Wake up",
+      description: "My wake up alarm",
+      autodelete: true,
+      "command": {
+          "address": `${commandAddress}`,
+          "method": "PUT",
+          "body": {
+              "on": true
+          }
+      },
+      localtime: time.concat(":00")
+    };
+
+    return axios.post(requestUri, payload); 
+  }
+
+  const getUrlWithAuthToken = (uri: string) => {
+    const host = process.env.REACT_APP_HOST ?? '';   
+    return host.concat(uri); 
+  }
+
+  function mapToLight(obj: any, id: string): ILight {
     return{
+      id: id,
       name: obj.name,
       bri: obj.state.bri,
       hue: obj.state.hue,
@@ -63,6 +97,18 @@ export const pollHueData = (setLights: any) => {
     };
   }
 
+  const arraysEqual = (a1: ILight[], a2: ILight[]) => {
+    if(a1.length === 0 || a2.length === 0) {
+      return false; 
+    }
+
+    for(let i = 0; i < a1.length; i++) {
+      if(a1[i].on !== a2[i].on) {
+        return false; 
+      }
+    }
+    return true; 
+  }
 
   //Todo: Replace the implementation above with this (need to test first)
   //https://stackoverflow.com/questions/22894498/philips-hue-convert-xy-from-api-to-hex-or-rgb
