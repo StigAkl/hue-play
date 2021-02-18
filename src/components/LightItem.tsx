@@ -24,6 +24,7 @@ flex-direction: column;
 align-items: center; 
 `
 
+
 const FlexItem = styled.div`
 margin-top: 10px; 
 `
