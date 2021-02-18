@@ -78,7 +78,7 @@ export const toggleLight = (id: number, toggle: boolean) => {
   }
 
   export const getUrlWithAuthToken = (uri: string) => {
-    const host = process.env.REACT_APP_HOST ?? '';   
+    const host = process.env.REACT_APP_HUE_HOST ?? '';   
     return host.concat(uri); 
   }
 
