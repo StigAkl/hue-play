@@ -1,18 +1,12 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-import ItemList from './components/itemlist';
+import { API } from './apiUris';
+import LightList from './components/LightList';
 import { GlobalStyle } from './globalstyle';
+import { IGroup } from './interfaces/IGroup';
 import { ILight } from './interfaces/ILight';
-import { pollHueData } from './utils/utils';
-
-const Item = styled.div<any>`
-  padding: 30px; 
-  margin: 20px; 
-  color: ${(props: any) => props.on ? 'green' : 'darkgrey'};
-  display: flex;
-  border: 5px solid ${(props: any) => props.color};
-`;
+import { getUrlWithAuthToken, pollHueData } from './utils/utils';
 
 const StyledHeader = styled.div`
   background-color: #222;
@@ -24,23 +18,39 @@ const StyledHeader = styled.div`
   text-align: center; 
 `
 
+const StyledContainer = styled.div`
+  width: 
+`
 
 function App() {
 
   const [lights, setLights] = useState<ILight[]>([]);
+  const [lightsGroup, setLightsGroup] = useState<IGroup[]>([]); 
 
   useEffect(() => {
     pollHueData(setLights, lights.slice()); 
     const interval = setInterval(() => pollHueData(setLights, lights.slice()), 1000);
-    
     return () => clearInterval(interval)
-  }, [lights]);
+  }, []);
+
+  useEffect(() => {
+    const apiUrl: string = getUrlWithAuthToken(API.LIST_GROUP(process.env.REACT_APP_AUTH_TOKEN)); 
+
+    axios.get<any>(apiUrl).then((response) => {
+      const data = response.data; 
+      
+      if(Object.keys(data).length !== 0) {
+        setLightsGroup(data); 
+      }
+    })
+  }, []);
 
   return (
     <React.Fragment>
       <GlobalStyle />
       <StyledHeader>Philips Hue Lights</StyledHeader>
-        {lights.length && <ItemList lights={lights} />}
+        {lights.length && <LightList lights={lights} />}
+        {lightsGroup && <h3>We got groups!</h3>}
     </React.Fragment>
   );
 }
