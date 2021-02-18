@@ -6,9 +6,7 @@ import { ILight } from '../interfaces/ILight';
 const dotenv = require('dotenv').config().parsed;
 
 export const pollHueData = (setLights: any, lights: ILight[]) => {
-
     const url = getUrlWithAuthToken(API.FETCH_LIGHTS(process.env.REACT_APP_AUTH_TOKEN)); 
-
     axios.get<any>(url).then((data) => {
 
       let listOfLights: ILight[] = []; 
@@ -69,7 +67,8 @@ export const toggleLight = (id: number, toggle: boolean) => {
           "address": `${commandAddress}`,
           "method": "PUT",
           "body": {
-              "on": true
+              "on": true,
+              "bri": 254
           }
       },
       localtime: time.concat(":00")
@@ -78,7 +77,7 @@ export const toggleLight = (id: number, toggle: boolean) => {
     return axios.post(requestUri, payload); 
   }
 
-  const getUrlWithAuthToken = (uri: string) => {
+  export const getUrlWithAuthToken = (uri: string) => {
     const host = process.env.REACT_APP_HOST ?? '';   
     return host.concat(uri); 
   }
@@ -172,3 +171,12 @@ function xyBriToRgbHexNotation(x: number, y: number, bri: number)
 
     return rgb;             
 }
+
+export const DefaultDate = (): string => {
+  const today = new Date(); 
+  return `${today.getFullYear()}-${pad2(today.getMonth()+1)}-${pad2(today.getDate())}T${pad2(today.getHours())}:${pad2(today.getMinutes())}`;
+}
+
+function pad2(n: number) {  // always returns a string
+  return (n < 10 ? '0' : '') + n;
+  }

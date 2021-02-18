@@ -7,5 +7,11 @@ export const API = {
     },
     CREATE_ALARM: function(token) {
         return `/api/${token}/schedules`
+    },
+    LIST_GROUP: function(token) {
+        return `/api/${token}/groups`
+    },
+    CREATE_GROUP: function(token) {
+        return `/api/${token}/groups`
     }
 };

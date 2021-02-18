@@ -1,7 +1,7 @@
 import React from 'react'; 
 import styled from 'styled-components';
 import { ILight } from '../interfaces/ILight';
-import Item from './Item';
+import LightItem from './LightItem';
 
 const Container = styled.div`
   padding: 10px; 
@@ -18,7 +18,7 @@ interface IProps {
 const ItemList = ( { lights }: IProps) => {
 
     const items = lights.map(i => {
-      return <Item key={i.id} light={i} />
+      return <LightItem key={i.id} light={i} />
     }); 
 
     return (
