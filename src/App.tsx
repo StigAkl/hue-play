@@ -50,7 +50,6 @@ function App() {
       <GlobalStyle />
       <StyledHeader>Philips Hue Lights</StyledHeader>
         {lights.length && <LightList lights={lights} />}
-        {lightsGroup && <h3>We got groups!</h3>}
     </React.Fragment>
   );
 }
