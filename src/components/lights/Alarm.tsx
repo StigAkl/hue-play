@@ -49,19 +49,19 @@ export const Alarm: React.FC<IProps> = ({
 
     const [wakeUpTime, setWakeUpTime] = useState<string>(DefaultDate); 
     const [hasActiveAlarm, setHasActiveAlarm] = useState<boolean>(false); 
-
+    const [alarmTime, setAlarmTime] = useState<string>(schedule === undefined ? "" : schedule?.localtime); 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWakeUpTime(e.target.value); 
     }
     
     const handleCreateAlarm = (e: React.MouseEvent<HTMLButtonElement>) => {
         createAlarm(light.id, wakeUpTime); 
+        setAlarmTime(FormatDate(wakeUpTime));
         setHasActiveAlarm(true); 
     }
 
     const handleDeleteAlarm = (e: React.MouseEvent<HTMLButtonElement>) => {
         deleteAlarm(schedule?.id).then((response) => {
-            console.log("Set has active")
             setHasActiveAlarm(false); 
         })
     }
@@ -69,10 +69,9 @@ export const Alarm: React.FC<IProps> = ({
     useEffect(() => {
        if(schedule !== undefined) {
            setHasActiveAlarm(true); 
+           setAlarmTime(FormatDate);
        } 
-    }, [hasActiveAlarm]);
-
-    const localTime = schedule?.localtime; 
+    },[]);
 
     const classes = useStyles();
 
@@ -96,7 +95,7 @@ export const Alarm: React.FC<IProps> = ({
               {hasActiveAlarm && <StyledAlarmHeader>Active alarm:</StyledAlarmHeader>}
 
               {hasActiveAlarm && <StyledAlarmInfo>
-                  {FormatDate(wakeUpTime)}
+                  {alarmTime}
                   </StyledAlarmInfo>}
 
                {hasActiveAlarm && 

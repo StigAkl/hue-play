@@ -3,6 +3,7 @@ import { API } from '../apiUris';
 import { IHSL } from '../interfaces/IHSL';
 import { ILight } from '../interfaces/ILight';
 import { ISchedule } from '../interfaces/ISchedule';
+import { WAKE_UP_ALARM } from './constants';
 require('dotenv').config();
 
 export const pollHueData = (setLights: any, lights: ILight[]) => {
@@ -81,7 +82,7 @@ export const getSchedules = (data: any) => {
     const commandAddress = API.PUT_LIGHT(process.env.REACT_APP_AUTH_TOKEN, id);
     const requestUri = getUrlWithAuthToken(API.CREATE_ALARM(process.env.REACT_APP_AUTH_TOKEN));
     const payload ={
-      name: "Wake up",
+      name: WAKE_UP_ALARM,
       description: "My wake up alarm",
       autodelete: true,
       "command": {
