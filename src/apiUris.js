@@ -13,5 +13,11 @@ export const API = {
     },
     CREATE_GROUP: function(token) {
         return `/api/${token}/groups`
+    },
+    LIST_SCHEDULES: function(token) {
+        return `/api/${token}/schedules`
+    },
+    DELETE_SCHEDULE: function(token, id) {
+        return `/api/${token}/schedules/${id}`; 
     }
 };

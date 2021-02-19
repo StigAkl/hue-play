@@ -1,0 +1,1 @@
+export const WAKE_UP_ALARM = "Wakeup"; 

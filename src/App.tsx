@@ -2,11 +2,12 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { API } from './apiUris';
-import LightList from './components/LightList';
+import LightList from './components/lights/LightList';
 import { GlobalStyle } from './globalstyle';
 import { IGroup } from './interfaces/IGroup';
 import { ILight } from './interfaces/ILight';
-import { getUrlWithAuthToken, pollHueData } from './utils/utils';
+import { ISchedule } from './interfaces/ISchedule';
+import { getSchedules, getUrlWithAuthToken, pollHueData } from './utils/utils';
 
 const StyledHeader = styled.div`
   background-color: #222;
@@ -18,14 +19,24 @@ const StyledHeader = styled.div`
   text-align: center; 
 `
 
-const StyledContainer = styled.div`
-  width: 
-`
-
 function App() {
 
   const [lights, setLights] = useState<ILight[]>([]);
   const [lightsGroup, setLightsGroup] = useState<IGroup[]>([]); 
+  const [schedules, setSchedules] = useState<ISchedule[]>([]); 
+
+  useEffect(() => {
+    axios.get<any>(getUrlWithAuthToken(API.LIST_GROUP(process.env.REACT_APP_AUTH_TOKEN))).then((response) => {
+      const data = response.data; 
+      if(Object.keys(data).length !== 0) {
+        setLightsGroup(data); 
+      }
+    });
+
+    axios.get<any>(getUrlWithAuthToken(API.LIST_SCHEDULES(process.env.REACT_APP_AUTH_TOKEN))).then((response) => {
+      setSchedules(getSchedules(response.data)); 
+    }); 
+  }, []);
 
   useEffect(() => {
     pollHueData(setLights, lights.slice()); 
@@ -33,23 +44,11 @@ function App() {
     return () => clearInterval(interval)
   }, []);
 
-  useEffect(() => {
-    const apiUrl: string = getUrlWithAuthToken(API.LIST_GROUP(process.env.REACT_APP_AUTH_TOKEN)); 
-
-    axios.get<any>(apiUrl).then((response) => {
-      const data = response.data; 
-      
-      if(Object.keys(data).length !== 0) {
-        setLightsGroup(data); 
-      }
-    })
-  }, []);
-
   return (
     <React.Fragment>
       <GlobalStyle />
       <StyledHeader>Philips Hue Lights</StyledHeader>
-        {lights.length && <LightList lights={lights} />}
+        {lights.length && <LightList lights={lights} schedules={schedules} />}
     </React.Fragment>
   );
 }

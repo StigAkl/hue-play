@@ -1,9 +1,9 @@
 import axios from 'axios'; 
-import { stringify } from 'querystring';
 import { API } from '../apiUris';
 import { IHSL } from '../interfaces/IHSL';
 import { ILight } from '../interfaces/ILight';
-const dotenv = require('dotenv').config().parsed;
+import { ISchedule } from '../interfaces/ISchedule';
+require('dotenv').config();
 
 export const pollHueData = (setLights: any, lights: ILight[]) => {
     const url = getUrlWithAuthToken(API.FETCH_LIGHTS(process.env.REACT_APP_AUTH_TOKEN)); 
@@ -43,6 +43,27 @@ export const pollHueData = (setLights: any, lights: ILight[]) => {
 export const toggleLight = (id: number, toggle: boolean) => {
   const url = getUrlWithAuthToken(API.PUT_LIGHT(process.env.REACT_APP_AUTH_TOKEN, id)); 
   return axios.put(url, {on:toggle});
+}
+
+export const deleteAlarm = (id: string | undefined) => {
+  const url = getUrlWithAuthToken(API.DELETE_SCHEDULE(process.env.REACT_APP_AUTH_TOKEN, id)); 
+  return axios.delete(url, {}); 
+}
+
+export const getSchedules = (data: any) => {
+
+  let schedules: ISchedule[] = []; 
+
+  for(let obj in data) {
+    schedules.push({
+      id: obj,
+      lightId: data[obj].command.address.split("/")[4],
+      localtime: data[obj].localtime,
+      name: data[obj].name
+    })
+  }
+
+    return schedules; 
 }
   
   function hslToHex(h: number, s: number, l: number) {
@@ -175,6 +196,16 @@ function xyBriToRgbHexNotation(x: number, y: number, bri: number)
 export const DefaultDate = (): string => {
   const today = new Date(); 
   return `${today.getFullYear()}-${pad2(today.getMonth()+1)}-${pad2(today.getDate())}T${pad2(today.getHours())}:${pad2(today.getMinutes())}`;
+}
+
+export const FormatDate = (date: string | undefined): string => {
+  const dateObject = date === undefined ? new Date() : new Date(date); 
+
+  const time = dateObject.toLocaleTimeString(); 
+  const day = pad2(dateObject.getDate());  
+  const month = pad2(dateObject.getMonth()+1); 
+
+  return `${day}.${month} ${time}`
 }
 
 function pad2(n: number) {  // always returns a string

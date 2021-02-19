@@ -1,6 +1,7 @@
 import React from 'react'; 
 import styled from 'styled-components';
-import { ILight } from '../interfaces/ILight';
+import { ILight } from '../../interfaces/ILight';
+import { ISchedule } from '../../interfaces/ISchedule';
 import LightItem from './LightItem';
 
 const Container = styled.div`
@@ -13,12 +14,15 @@ const Container = styled.div`
 
 interface IProps {
   lights: ILight[]
+  schedules: ISchedule[]
 }
 
-const ItemList = ( { lights }: IProps) => {
+const ItemList = ( { lights, schedules }: IProps) => {
 
     const items = lights.map(i => {
-      return <LightItem key={i.id} light={i} />
+      const schedule = schedules.find(s => s.lightId === i.id); 
+
+      return <LightItem key={i.id} light={i} schedule={schedule} />
     }); 
 
     return (
