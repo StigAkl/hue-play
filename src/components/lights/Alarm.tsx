@@ -77,31 +77,34 @@ export const Alarm: React.FC<IProps> = ({
 
     return (
         <>
-            {!hasActiveAlarm &&<TextField
-                    id="datetime-local"
-                    label="Set alarm"
-                    type="datetime-local"
-                    defaultValue={wakeUpTime}
-                    className={classes.textField}
-                    onChange={handleDateChange}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                />}
-                
-              {!hasActiveAlarm && <Button color="primary" onClick={handleCreateAlarm}>Create Alarm</Button>}
+            {!hasActiveAlarm && <>
+                <TextField
+                        id="datetime-local"
+                        label="Set alarm"
+                        type="datetime-local"
+                        defaultValue={wakeUpTime}
+                        className={classes.textField}
+                        onChange={handleDateChange}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                    />
+                    
+                    <Button color="primary" onClick={handleCreateAlarm}>Create Alarm</Button>   
+                </>}
 
+              {hasActiveAlarm && 
+              <>
+                    <StyledAlarmHeader>Active alarm:</StyledAlarmHeader>
 
-              {hasActiveAlarm && <StyledAlarmHeader>Active alarm:</StyledAlarmHeader>}
+                    <StyledAlarmInfo>
+                        {alarmTime}
+                    </StyledAlarmInfo>
 
-              {hasActiveAlarm && <StyledAlarmInfo>
-                  {alarmTime}
-                  </StyledAlarmInfo>}
-
-               {hasActiveAlarm && 
-               <Button onClick={handleDeleteAlarm} color="primary">
-                    Delete Alarm
-                </Button>}
+                    <Button onClick={handleDeleteAlarm} color="primary">
+                            Delete Alarm
+                    </Button>
+                </>}
             </>
     )
 }
