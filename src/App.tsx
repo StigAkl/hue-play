@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { API } from './apiUris';
-import LightList from './components/lights/LightList';
+import LightList from './Components/lights/LightList';
 import { GlobalStyle } from './globalstyle';
 import { IGroup } from './interfaces/IGroup';
 import { ILight } from './interfaces/ILight';
