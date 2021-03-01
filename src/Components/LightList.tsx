@@ -39,10 +39,8 @@ const LightList: React.FC<IProps> = ( { items } ) => {
             {items.map(l => {
 
                 const isChecked = checked.indexOf(l.id.toString()) !== -1;
-
-                console.log(isChecked); 
                 return (
-                    <ListItem role={undefined} button onClick={handleToggle(l.id.toString())}>
+                    <ListItem key={l.id} role={undefined} button onClick={handleToggle(l.id.toString())}>
                         <ListItemIcon>
                             <EmojiObjectsIcon color={isChecked ? "secondary" : "disabled"} />
                         </ListItemIcon>

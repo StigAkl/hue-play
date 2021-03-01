@@ -21,7 +21,7 @@ function App() {
     <React.Fragment>
       <GlobalStyle />
       <StyledHeader>
-        <Container maxWidth="md">Philips Hue Lights</Container></StyledHeader>
+        <Container maxWidth="md">RGB DashBoard</Container></StyledHeader>
 
     <Container maxWidth="md">
 
