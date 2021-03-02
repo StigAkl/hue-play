@@ -1,5 +1,5 @@
-import { Container, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Switch } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import { Container} from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 import { GlobalStyle } from './globalstyle';
 import LightsDashboard from './Components/LightsDashboard';

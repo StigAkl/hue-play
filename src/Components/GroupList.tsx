@@ -10,11 +10,11 @@ interface IProps {
 
 const StyledPaper = styled(Paper)`
     margin-top: 40px; 
-`; 
+`;
 
 const StyledSwitch = styled(Switch)`
     margin-right: 50px; 
-`; 
+`;
 
 const StyledNestedListContainer = styled.div`
     margin: 0 auto; 
@@ -24,7 +24,7 @@ const StyledNestedListContainer = styled.div`
     margin: 0 auto; 
 `;
 
-const useStyles = makeStyles(() => 
+const useStyles = makeStyles(() =>
     createStyles({
         root: {
         },
@@ -38,68 +38,69 @@ const useStyles = makeStyles(() =>
 );
 
 const initializeLights = (items: IGroup[]): string[] => {
-    const lights: string[] = []; 
+    const lights: string[] = [];
     items.forEach(g => g.lights.forEach(l => {
-        if(l.checked) {
+        if (l.checked) {
             lights.push(l.id.toString());
         }
-    })); 
-    return lights; 
+    }));
+    return lights;
 }
 
-const GroupList: React.FC<IProps> = ( { items } ) => {
+const GroupList: React.FC<IProps> = ({ items }) => {
 
     const [checkedGroups, setCheckedGroups] = useState<string[]>(items.filter(x => x.checked).map(x => x.id.toString()));
     const [checkedLights, setCheckedLights] = useState<string[]>(initializeLights(items));
-    const [open, setOpen] = useState<string[]>([]); 
+    const [open, setOpen] = useState<string[]>([]);
 
-    const classes = useStyles(); 
+    const classes = useStyles();
 
     const handleToggleGroups = (value: string) => () => {
-        const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups); 
-        const newCheckedLights = [...checkedLights]; 
+        const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups);
+        const newCheckedLights = [...checkedLights];
+        
         items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
-            const currentIndex = newCheckedLights.indexOf(l.id.toString()); 
-            if(stateChangeOn) {
-                if(currentIndex === -1) {
-                    newCheckedLights.push(l.id.toString()); 
+            const currentIndex = newCheckedLights.indexOf(l.id.toString());
+            if (stateChangeOn) {
+                if (currentIndex === -1) {
+                    newCheckedLights.push(l.id.toString());
                 }
             } else {
-                if(currentIndex !== -1) {
-                    newCheckedLights.splice(currentIndex, 1);  
+                if (currentIndex !== -1) {
+                    newCheckedLights.splice(currentIndex, 1);
                 }
             }
-        }); 
+        });
 
-        setCheckedLights(newCheckedLights); 
+        setCheckedLights(newCheckedLights);
     }
 
     const handleToggleLight = (value: string) => () => {
-        toggle(value, checkedLights, setCheckedLights); 
+        toggle(value, checkedLights, setCheckedLights);
     }
 
     const handleCollapse = (value: string) => () => {
-         toggle(value, open, setOpen); 
-    }; 
+        toggle(value, open, setOpen);
+    };
 
     const toggle = (value: string, state: string[], callback: (newState: string[]) => any): boolean => {
-        const currentIndex = state.indexOf(value); 
-        const newChecked = [...state]; 
+        const currentIndex = state.indexOf(value);
+        const newChecked = [...state];
 
         //true = light on, false = light off
-        let stateChangeOn = true; 
+        let stateChangeOn = true;
 
-        if(currentIndex === -1) {
-           newChecked.push(value); 
+        if (currentIndex === -1) {
+            newChecked.push(value);
         } else {
-            newChecked.splice(currentIndex, 1); 
-            stateChangeOn = false; 
+            newChecked.splice(currentIndex, 1);
+            stateChangeOn = false;
         }
-        callback(newChecked); 
-        return stateChangeOn; 
+        callback(newChecked);
+        return stateChangeOn;
     }
 
-        
+
     return (
         <StyledPaper elevation={4}>
             <List subheader={
@@ -108,57 +109,58 @@ const GroupList: React.FC<IProps> = ( { items } ) => {
                 </ListSubheader>
             }>
 
-            {items.map(g => {
+                {items.map(g => {
 
-                const groupIsChecked = checkedGroups.indexOf(g.id.toString()) !== -1;
-                const isOpen = open.indexOf(g.id.toString()) !== -1; 
+                    const groupIsChecked = checkedGroups.indexOf(g.id.toString()) !== -1;
+                    const isOpen = open.indexOf(g.id.toString()) !== -1;
 
-                return (
-                    <React.Fragment key={"fragment"+g.id}>
-                        <ListItem role={undefined} divider button onClick={handleCollapse(g.id.toString())}>
-                            <ListItemIcon key={"ListItemIcon"+g.id}>
-                                <EmojiObjectsIcon color={groupIsChecked ? "secondary" : "disabled"} />
-                            </ListItemIcon>
-                            <ListItemText id={g.id.toString()} primary={g.name} />
-                            <ListItemSecondaryAction>
-                                <Switch
-                                    edge="end"
-                                    onChange={handleToggleGroups(g.id.toString())}
-                                    checked={groupIsChecked}
-                                    inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
-                                />
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                    return (
+                        <React.Fragment key={"fragment" + g.id}>
+                            <ListItem role={undefined} divider button onClick={handleCollapse(g.id.toString())}>
+                                <ListItemIcon key={"ListItemIcon" + g.id}>
+                                    <EmojiObjectsIcon color={groupIsChecked ? "secondary" : "disabled"} />
+                                </ListItemIcon>
+                                <ListItemText id={g.id.toString()} primary={g.name} />
+                                <ListItemSecondaryAction>
+                                    <Switch
+                                        edge="end"
+                                        onChange={handleToggleGroups(g.id.toString())}
+                                        checked={groupIsChecked}
+                                        inputProps={{ 'aria-labelledby': 'switch-list-label-wifi' }}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
 
-                        <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                            <StyledNestedListContainer>
-                            {g.lights.map(l => {
-                                const lightIsChecked = checkedLights.indexOf(l.id.toString()) !== -1; 
-                                return (
-                                    <List key={l.id} disablePadding>
-                                        <ListItem className={classes.nested}>
-                                        <ListItemIcon>
-                                            <EmojiObjectsIcon color={lightIsChecked ? "primary" : "disabled"} />
-                                        </ListItemIcon>
-                                        <ListItemText id={l.id.toString()} primary={g.name + "-"+l.name} />
-                                        <ListItemSecondaryAction>
-                                            <StyledSwitch
-                                                edge="end"
-                                                onChange={handleToggleLight(l.id.toString())}
-                                                checked={lightIsChecked}
-                                                color={"primary"}
-                                            />
-                                        </ListItemSecondaryAction>
-                                        </ListItem>
-                                    </List>
-                                )
-                            })}
-                            </StyledNestedListContainer>
-                        </Collapse>
-                    </React.Fragment>
-                )})}
-        </List>
-      </StyledPaper>
+                            <Collapse in={isOpen} timeout="auto" unmountOnExit>
+                                <StyledNestedListContainer>
+                                    {g.lights.map(l => {
+                                        const lightIsChecked = checkedLights.indexOf(l.id.toString()) !== -1;
+                                        return (
+                                            <List key={l.id} disablePadding>
+                                                <ListItem className={classes.nested}>
+                                                    <ListItemIcon>
+                                                        <EmojiObjectsIcon color={lightIsChecked ? "primary" : "disabled"} />
+                                                    </ListItemIcon>
+                                                    <ListItemText id={l.id.toString()} primary={g.name + "-" + l.name} />
+                                                    <ListItemSecondaryAction>
+                                                        <StyledSwitch
+                                                            edge="end"
+                                                            onChange={handleToggleLight(l.id.toString())}
+                                                            checked={lightIsChecked}
+                                                            color={"primary"}
+                                                        />
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>
+                                            </List>
+                                        )
+                                    })}
+                                </StyledNestedListContainer>
+                            </Collapse>
+                        </React.Fragment>
+                    )
+                })}
+            </List>
+        </StyledPaper>
     );
 };
 

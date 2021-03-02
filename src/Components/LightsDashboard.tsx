@@ -1,11 +1,10 @@
-import { Grid, Paper, Typography } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import React from 'react'; 
 import { IGroup } from '../Interfaces/IGroup';
 import { IListItem } from '../Interfaces/IListItem';
 import GroupList from './GroupList';
-import LightList from './LightList';
 
-const LightsDashboard = (props: any) => {
+const LightsDashboard = () => {
 
     const lights: IListItem[] = [{
         checked: true,
