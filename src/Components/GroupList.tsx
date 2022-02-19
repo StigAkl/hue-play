@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
 import { IGroup } from "../Interfaces/IGroup";
-import { initializeLights } from '../utils'; 
+import { initializeLights } from '../utils';
 
 interface IProps {
     items: IGroup[];
@@ -45,15 +45,15 @@ const GroupList: React.FC<IProps> = ({ items }) => {
     const [open, setOpen] = useState<string[]>([]);
 
     const classes = useStyles();
-    
+
     useEffect(() => {
         setCheckedLights(initializeLights(items));
-    }, [items]); 
+    }, [items]);
 
     const handleToggleGroups = (value: string) => () => {
         const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups);
         const newCheckedLights = [...checkedLights];
-        
+
         items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
             const currentIndex = newCheckedLights.indexOf(l.id.toString());
             if (stateChangeOn) {
