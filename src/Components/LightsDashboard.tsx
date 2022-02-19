@@ -1,50 +1,35 @@
 import { Grid, Paper } from '@material-ui/core';
-import React from 'react'; 
+import React from 'react';
 import { IGroup } from '../Interfaces/IGroup';
-import { IListItem } from '../Interfaces/IListItem';
+import { ILightItem } from '../Interfaces/ILightItem';
 import GroupList from './GroupList';
 
-const LightsDashboard = () => {
+type Props = {
+    lights: ILightItem[]
+};
 
-    const lights: IListItem[] = [{
+const LightsDashboard = ({ lights }: Props) => {
+
+    const dummyLights: ILightItem[] = [{
         checked: true,
-        id: 1,
-        name: "Light 1"
+        id: 3,
+        name: "Light 3"
     },
     {
         checked: false,
-        id: 2,
-        name: "Light 2"
+        id: 4,
+        name: "Light 4"
     }
-];
+    ];
 
-const lights2: IListItem[] = [{
-    checked: true,
-    id: 3,
-    name: "Light 3"
-},
-{
-    checked: false,
-    id: 4,
-    name: "Light 4"
-}
-];
-
-const groups: IGroup[] = [{
-    checked: false,
-    id: 1,
-    name: "Bedroom",
-    lights: lights
-},
-{
-    checked: true,
-    id: 2,
-    name: "Living room",
-    lights: lights2
-}]; 
+    const groups: IGroup[] = [{
+        checked: true,
+        id: 1,
+        name: "Bedroom",
+        lights: lights
+    }];
 
     return (
-
         <React.Fragment>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12}>
@@ -55,20 +40,20 @@ const groups: IGroup[] = [{
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <Paper>
-          
+                        {/* Alerts */}
                     </Paper>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
                     <Paper>
-                   
+                        {/* Schedules? */}
                     </Paper>
                 </Grid>
             </Grid>
         </React.Fragment>
 
-            
-        )
+
+    )
 
 }
 

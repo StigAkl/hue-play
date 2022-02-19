@@ -1,8 +1,8 @@
-import { IListItem } from "./IListItem";
+import { ILightItem } from "./ILightItem";
 
 export interface IGroup {
     id: number,
     name: string,
-    lights: IListItem[],
+    lights: ILightItem[],
     checked: boolean
 }

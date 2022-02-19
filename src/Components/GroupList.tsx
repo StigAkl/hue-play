@@ -1,8 +1,9 @@
-import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Switch, Paper, ListSubheader, createStyles, makeStyles, Box, Collapse } from "@material-ui/core"
-import React, { useState } from "react"
+import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Switch, Paper, ListSubheader, createStyles, makeStyles, Collapse } from "@material-ui/core"
+import React, { useEffect, useState } from "react"
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
 import { IGroup } from "../Interfaces/IGroup";
+import { initializeLights } from '../utils'; 
 
 interface IProps {
     items: IGroup[];
@@ -37,23 +38,17 @@ const useStyles = makeStyles(() =>
     })
 );
 
-const initializeLights = (items: IGroup[]): string[] => {
-    const lights: string[] = [];
-    items.forEach(g => g.lights.forEach(l => {
-        if (l.checked) {
-            lights.push(l.id.toString());
-        }
-    }));
-    return lights;
-}
-
 const GroupList: React.FC<IProps> = ({ items }) => {
 
     const [checkedGroups, setCheckedGroups] = useState<string[]>(items.filter(x => x.checked).map(x => x.id.toString()));
-    const [checkedLights, setCheckedLights] = useState<string[]>(initializeLights(items));
+    const [checkedLights, setCheckedLights] = useState<string[]>([]);
     const [open, setOpen] = useState<string[]>([]);
 
     const classes = useStyles();
+    
+    useEffect(() => {
+        setCheckedLights(initializeLights(items));
+    }, [items]); 
 
     const handleToggleGroups = (value: string) => () => {
         const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups);
@@ -100,7 +95,6 @@ const GroupList: React.FC<IProps> = ({ items }) => {
         return stateChangeOn;
     }
 
-
     return (
         <StyledPaper elevation={4}>
             <List subheader={
@@ -134,6 +128,8 @@ const GroupList: React.FC<IProps> = ({ items }) => {
                             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                                 <StyledNestedListContainer>
                                     {g.lights.map(l => {
+                                        console.log("tsx:", l.id);
+                                        console.log("checkedLights:", checkedLights)
                                         const lightIsChecked = checkedLights.indexOf(l.id.toString()) !== -1;
                                         return (
                                             <List key={l.id} disablePadding>

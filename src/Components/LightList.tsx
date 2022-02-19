@@ -2,10 +2,10 @@ import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Sw
 import React, { useState } from "react"
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
-import { IListItem } from "../Interfaces/IListItem";
+import { ILightItem } from "../Interfaces/ILightItem";
 
 interface IProps {
-    items: IListItem[];
+    items: ILightItem[];
 }
 
 const LightList: React.FC<IProps> = ( { items } ) => {
