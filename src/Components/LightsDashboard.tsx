@@ -22,16 +22,23 @@ const LightsDashboard = ({ lights }: Props) => {
     }
     ];
 
-    const groups: IGroup[] = [{
-        checked: true,
-        id: 1,
-        name: "Dummy group",
-        lights: dummyLights
-    }];
+    const groups: IGroup[] = [
+        {
+            checked: true,
+            id: 2,
+            name: "Bedroom",
+            lights: lights
+        },
+        {
+            checked: true,
+            id: 1,
+            name: "Dummy group",
+            lights: dummyLights
+        }];
 
     return (
         <React.Fragment>
-            <Grid container spacing={3}>
+            <Grid container spacing={10}>
                 <Grid item xs={12} md={12}>
                     <GroupList items={groups} />
                 </Grid>
@@ -40,7 +47,7 @@ const LightsDashboard = ({ lights }: Props) => {
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                     <Paper>
-                        {/* Alerts */}
+                        {/* Alerts? */}
                     </Paper>
                 </Grid>
 
