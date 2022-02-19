@@ -7,7 +7,7 @@ import LightItem from './LightItem';
 const Container = styled.div`
   padding: 10px; 
   display: flex; 
-  flext-direction: row; 
+  flex-direction: row; 
   justify-content: center; 
   align-items: center;
 `
