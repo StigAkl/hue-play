@@ -40,14 +40,17 @@ const useStyles = makeStyles(() =>
 
 const GroupList: React.FC<IProps> = ({ items }) => {
 
-    const [checkedGroups, setCheckedGroups] = useState<string[]>(items.filter(x => x.checked).map(x => x.id.toString()));
+    const [checkedGroups, setCheckedGroups] = useState<string[]>([]);
     const [checkedLights, setCheckedLights] = useState<string[]>([]);
     const [open, setOpen] = useState<string[]>([]);
+
+    console.log("checked:", items.filter(x => x.checked).map(x => x.id.toString()));
 
     const classes = useStyles();
 
     useEffect(() => {
         setCheckedLights(initializeLights(items));
+        setCheckedGroups(items.filter(x => x.checked).map(x => x.id.toString()))
     }, [items]);
 
     const handleToggleGroups = (value: string) => () => {
@@ -128,8 +131,6 @@ const GroupList: React.FC<IProps> = ({ items }) => {
                             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                                 <StyledNestedListContainer>
                                     {g.lights.map(l => {
-                                        console.log("tsx:", l.id);
-                                        console.log("checkedLights:", checkedLights)
                                         const lightIsChecked = checkedLights.indexOf(l.id.toString()) !== -1;
                                         return (
                                             <List key={l.id} disablePadding>

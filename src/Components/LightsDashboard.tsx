@@ -5,42 +5,15 @@ import { ILightItem } from '../Interfaces/ILightItem';
 import GroupList from './GroupList';
 
 type Props = {
-    lights: ILightItem[]
+    lightGroups: IGroup[]
 };
 
-const LightsDashboard = ({ lights }: Props) => {
-
-    const dummyLights: ILightItem[] = [{
-        checked: true,
-        id: 3,
-        name: "Dummy Light 3"
-    },
-    {
-        checked: false,
-        id: 4,
-        name: "Dummy Light 4"
-    }
-    ];
-
-    const groups: IGroup[] = [
-        {
-            checked: true,
-            id: 2,
-            name: "Bedroom",
-            lights: lights
-        },
-        {
-            checked: true,
-            id: 1,
-            name: "Dummy group",
-            lights: dummyLights
-        }];
-
+const LightsDashboard = ({ lightGroups }: Props) => {
     return (
         <React.Fragment>
             <Grid container spacing={10}>
                 <Grid item xs={12} md={12}>
-                    <GroupList items={groups} />
+                    <GroupList items={lightGroups} />
                 </Grid>
             </Grid>
 

@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { GlobalStyle } from './globalstyle';
 import LightsDashboard from './Components/LightsDashboard';
 import { ILightItem } from './Interfaces/ILightItem';
-import { Lights } from './Api/agent';
-import { mapToLightItem } from './utils';
+import { Lights, Groups } from './Api/agent';
+import { mapToGroupItem, mapToLightItem } from './utils';
+import { IGroup } from './Interfaces/IGroup';
 
 const StyledHeader = styled.div`
   padding: 20px; 
@@ -21,14 +22,21 @@ const StyledHeader = styled.div`
 const App = () => {
 
   const [lights, setLights] = useState<ILightItem[]>([]);
+  const [lightGroups, setLightGroups] = useState<IGroup[]>([]);
 
   useEffect(() => {
     Lights.getLights().then(data => {
       setLights(mapToLightItem(data));
-    });
+    })
   }, []);
 
-  console.log("kake");
+  useEffect(() => {
+    if (lights) {
+      Groups.getGroups().then(data => {
+        setLightGroups(mapToGroupItem(data, lights));
+      })
+    }
+  }, [lights])
 
   return (
     <React.Fragment>
@@ -36,7 +44,7 @@ const App = () => {
       <StyledHeader>
         <Container maxWidth="md">RGB DashBoard</Container></StyledHeader>
       <Container maxWidth="md">
-        <LightsDashboard lights={lights} />
+        <LightsDashboard lightGroups={lightGroups} />
       </Container>
     </React.Fragment>
   );
