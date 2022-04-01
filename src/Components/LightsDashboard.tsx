@@ -1,7 +1,6 @@
 import { Grid, Paper } from '@material-ui/core';
 import React from 'react';
 import { IGroup } from '../Interfaces/IGroup';
-import { ILightItem } from '../Interfaces/ILightItem';
 import GroupList from './GroupList';
 
 type Props = {

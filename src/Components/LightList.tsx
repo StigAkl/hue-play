@@ -37,7 +37,6 @@ const LightList: React.FC<IProps> = ({ items }) => {
             }>
 
                 {items.map(l => {
-
                     const isChecked = checked.indexOf(l.id.toString()) !== -1;
                     return (
                         <ListItem key={l.id} role={undefined} button onClick={handleToggle(l.id.toString())}>
