@@ -55,28 +55,29 @@ const GroupList: React.FC<IProps> = ({ items }) => {
     const handleToggleGroups = (value: string) => () => {
         const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups);
         const newCheckedLights = [...checkedLights];
-        Groups.toggleGroup(parseInt(value), stateChangeOn).then(data => {
-            items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
-                const currentIndex = newCheckedLights.indexOf(l.id.toString());
-                if (stateChangeOn) {
-                    if (currentIndex === -1) {
-                        newCheckedLights.push(l.id.toString());
+
+        Groups.toggleGroup(parseInt(value), stateChangeOn).then((data: any) => {
+            if (data.data[0].success) {
+                items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
+                    const currentIndex = newCheckedLights.indexOf(l.id.toString());
+                    if (stateChangeOn) {
+                        if (currentIndex === -1) {
+                            newCheckedLights.push(l.id.toString());
+                        }
+                    } else {
+                        if (currentIndex !== -1) {
+                            newCheckedLights.splice(currentIndex, 1);
+                        }
                     }
-                } else {
-                    if (currentIndex !== -1) {
-                        newCheckedLights.splice(currentIndex, 1);
-                    }
-                }
-            });
-            setCheckedLights(newCheckedLights);
+                });
+                setCheckedLights(newCheckedLights);
+            }
         })
     }
 
     const handleToggleLight = (value: string) => () => {
         const state = toggle(value, checkedLights, setCheckedLights);
-        Lights.toggleLight(parseInt(value), state).then(data => {
-            console.log("Toggled");
-        })
+        Lights.toggleLight(parseInt(value), state);
     }
 
     const handleCollapse = (value: string) => () => {
