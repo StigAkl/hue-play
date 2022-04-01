@@ -4,6 +4,7 @@ import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
 import { IGroup } from "../Interfaces/IGroup";
 import { initializeLights } from '../utils';
+import { Lights, Groups } from '../Api/agent';
 
 interface IProps {
     items: IGroup[];
@@ -44,8 +45,6 @@ const GroupList: React.FC<IProps> = ({ items }) => {
     const [checkedLights, setCheckedLights] = useState<string[]>([]);
     const [open, setOpen] = useState<string[]>([]);
 
-    console.log("checked:", items.filter(x => x.checked).map(x => x.id.toString()));
-
     const classes = useStyles();
 
     useEffect(() => {
@@ -56,25 +55,28 @@ const GroupList: React.FC<IProps> = ({ items }) => {
     const handleToggleGroups = (value: string) => () => {
         const stateChangeOn = toggle(value, checkedGroups, setCheckedGroups);
         const newCheckedLights = [...checkedLights];
-
-        items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
-            const currentIndex = newCheckedLights.indexOf(l.id.toString());
-            if (stateChangeOn) {
-                if (currentIndex === -1) {
-                    newCheckedLights.push(l.id.toString());
+        Groups.toggleGroup(parseInt(value), stateChangeOn).then(data => {
+            items.find(x => x.id.toString() === value)?.lights?.forEach(l => {
+                const currentIndex = newCheckedLights.indexOf(l.id.toString());
+                if (stateChangeOn) {
+                    if (currentIndex === -1) {
+                        newCheckedLights.push(l.id.toString());
+                    }
+                } else {
+                    if (currentIndex !== -1) {
+                        newCheckedLights.splice(currentIndex, 1);
+                    }
                 }
-            } else {
-                if (currentIndex !== -1) {
-                    newCheckedLights.splice(currentIndex, 1);
-                }
-            }
-        });
-
-        setCheckedLights(newCheckedLights);
+            });
+            setCheckedLights(newCheckedLights);
+        })
     }
 
     const handleToggleLight = (value: string) => () => {
-        toggle(value, checkedLights, setCheckedLights);
+        const state = toggle(value, checkedLights, setCheckedLights);
+        Lights.toggleLight(parseInt(value), state).then(data => {
+            console.log("Toggled");
+        })
     }
 
     const handleCollapse = (value: string) => () => {
@@ -95,6 +97,7 @@ const GroupList: React.FC<IProps> = ({ items }) => {
             stateChangeOn = false;
         }
         callback(newChecked);
+
         return stateChangeOn;
     }
 
