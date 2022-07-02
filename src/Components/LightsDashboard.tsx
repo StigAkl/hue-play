@@ -14,21 +14,21 @@ const LightsDashboard = ({ lightGroups }: Props) => {
                 <Grid item xs={12} md={12}>
                     <GroupList items={lightGroups} />
                 </Grid>
-            </Grid>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} md={12}>
                     <Paper>
-                        {/* Alerts? */}
+                        {<h1>Alerts?</h1>}
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} md={12}>
                     <Paper>
-                        {/* Schedules? */}
+                        {<h1>Schedules?</h1>}
                     </Paper>
                 </Grid>
             </Grid>
+
+
         </React.Fragment>
     )
 }

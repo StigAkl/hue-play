@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-require('dotenv').config();
 
 axios.defaults.baseURL = process.env.REACT_APP_HUE_HOST;
 const username = process.env.REACT_APP_AUTH_TOKEN;
