@@ -2,7 +2,7 @@ import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Sw
 import React, { useState } from "react"
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
-import { ILightItem } from "../Interfaces/ILightItem";
+import { ILightItem } from "../../Interfaces/ILightItem";
 
 interface IProps {
     items: ILightItem[];
@@ -30,6 +30,7 @@ const LightList: React.FC<IProps> = ({ items }) => {
 
     return (
         <StyledPaper elevation={4}>
+            <h1>Lught list!!</h1>
             <List subheader={
                 <ListSubheader component="div" id="lights-title">
                     Lights

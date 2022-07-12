@@ -1,7 +1,7 @@
 import { Grid, Paper } from '@material-ui/core';
 import React from 'react';
 import { IGroup } from '../Interfaces/IGroup';
-import GroupList from './GroupList';
+import GroupList from './Common/GroupList';
 
 type Props = {
     lightGroups: IGroup[]

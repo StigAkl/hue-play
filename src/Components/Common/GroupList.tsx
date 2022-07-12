@@ -2,9 +2,9 @@ import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Sw
 import React, { useEffect, useState } from "react"
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import styled from "styled-components";
-import { IGroup } from "../Interfaces/IGroup";
-import { initializeLights } from '../utils';
-import { Lights, Groups } from '../Api/agent';
+import { IGroup } from "../../Interfaces/IGroup";
+import { initializeLights } from '../../utils';
+import { Lights, Groups } from '../../Api/agent';
 
 interface IProps {
     items: IGroup[];
